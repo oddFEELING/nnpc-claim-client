@@ -6,7 +6,20 @@ module.exports = {
     './src/layout/**/*.{js,jsx}',
   ],
   theme: {
-    extend: {},
+    fontFamily: {
+      primary: "'Roboto Slab', serif",
+      secondary: "'Mali', cursive",
+    },
+    extend: {
+      colors: {
+        'clr-1': '#AC3E31',
+        'clr-2': '#DBAE58',
+        'clr-3': '#20283E',
+        'clr-4': '#488A99',
+        'clr-5': '#484848 ',
+        'clr-6': '#ACE',
+      },
+    },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 };
