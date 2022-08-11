@@ -4,8 +4,10 @@ import { navStore } from '../../global/nav.global';
 import DashLayout from '../../layout/Dash.layout';
 import Info from '../../components/dashboard/profile/Info.component';
 import Hero from '../../components/dashboard/profile/Hero.component';
+import useAuth from '../../hooks/useAuth';
 
 const Profile = () => {
+  useAuth();
   const { setCurrent } = navStore();
   const router = useRouter();
   return (

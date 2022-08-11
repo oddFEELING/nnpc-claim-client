@@ -1,10 +1,10 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { navStore } from '../global/nav.global';
 import { Dialog, Menu, Transition } from '@headlessui/react';
 import { SearchIcon } from '@heroicons/react/solid';
 import { XIcon, MenuAlt2Icon, BellIcon } from '@heroicons/react/outline';
 import { navOptions, userNavigation } from '../static/data/dashLayout.data';
-import { navStore } from '../global/nav.global';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -14,6 +14,12 @@ export default function DashLayout({ children }) {
   const router = useRouter();
   const { current, setCurrent } = navStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // ======= check for current nav state -->
+  useEffect(() => {
+    const sessionState = sessionStorage.getItem('nav');
+    sessionState && setCurrent(sessionState);
+  }, []);
 
   return (
     <>
@@ -83,19 +89,20 @@ export default function DashLayout({ children }) {
                         <div
                           key={item.name}
                           className={classNames(
-                            item.current
+                            current === item.href
                               ? 'bg-gray-900 text-white'
                               : 'text-gray-300 cursor-pointer hover:bg-gray-700 hover:text-white',
                             'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                           )}
                           onClick={() => {
-                            setCurrent(item.name);
+                            setSidebarOpen((state) => !state);
+                            setCurrent(item.href);
                             router.replace(item.href);
                           }}
                         >
                           <item.icon
                             className={classNames(
-                              item.current
+                              current === item.href
                                 ? 'text-gray-300'
                                 : 'text-gray-400 group-hover:text-gray-300',
                               'mr-4 flex-shrink-0 h-6 w-6'
@@ -133,19 +140,19 @@ export default function DashLayout({ children }) {
                   <div
                     key={item.name}
                     className={classNames(
-                      current === item.name
+                      current === item.href
                         ? 'bg-gray-900 text-white'
                         : 'text-gray-300 cursor-pointer hover:bg-gray-700 hover:text-white',
                       'group flex items-center px-2 py-2 text-sm font-medium rounded-md'
                     )}
                     onClick={() => {
-                      setCurrent(item.name);
+                      setCurrent(item.href);
                       router.replace(item.href);
                     }}
                   >
                     <item.icon
                       className={classNames(
-                        item.current
+                        current === item.href
                           ? 'text-gray-300'
                           : 'text-gray-400 group-hover:text-gray-300',
                         'mr-3 flex-shrink-0 h-6 w-6'

@@ -20,4 +20,7 @@
 
 /** Components */
 @layer components {
+  .close__btn {
+    @apply absolute right-5 text-gray-600 hover:text-clr-1 cursor-pointer rounded py-1 px-2 shadow-sm border border-red-400;
+  }
 }

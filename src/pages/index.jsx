@@ -7,6 +7,7 @@ export default function Home() {
   const router = useRouter();
   const [secret, setSecret] = useState('');
   const [visible, setVisible] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   // ======= onchange secret field -->
   const onSecretChange = (e) => {
@@ -22,25 +23,28 @@ export default function Home() {
       </Head>
 
       <main className='px-12 py-24 shadow-xl rounded bg-white flex flex-col gap-9 items-center'>
-        <h1 className='text-3xl font-primary font-bold text-center'>
+        <h1 className='text-3xl text-gray-700 font-primary font-bold text-center'>
           Claim System
         </h1>
 
         {/* ====== Secret ID field */}
-        <div className='relative flex items-center justify-center'>
+        <div className='relative flex items-center justify-center flex-col'>
           {visible ? (
             <EyeOffIcon
-              className='h-6 w-8 cursor-pointer absolute text-gray-600 right-3'
+              className='h-6 w-8 bottom-3 cursor-pointer absolute text-gray-600 right-3'
               onClick={() => setVisible((visible) => !visible)}
             />
           ) : (
             <EyeIcon
-              className='h-6 w-8 cursor-pointer absolute text-gray-600 right-3'
+              className='h-6 w-8 bottom-3 cursor-pointer absolute text-gray-600 right-3'
               onClick={() => setVisible((visible) => !visible)}
             />
           )}
+          <p className='font-secondary font-semibold text-gray-500 mb-3 self-start'>
+            Enter your secret ID
+          </p>
           <input
-            className='px-9 py-3 h-12 w-96 border-none focus:outline-clr-4 font-secondary bg-gray-200 shadow-sm'
+            className='px-9 py-3 h-12 w-96 border-none rounded-md focus:outline-clr-4 font-secondary bg-gray-200 shadow-sm'
             type={visible ? 'text' : 'password'}
             value={secret}
             onChange={onSecretChange}

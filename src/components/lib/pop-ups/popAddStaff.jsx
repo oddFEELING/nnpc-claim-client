@@ -32,7 +32,7 @@ export default function PopAddStaff({ state, setState }) {
               <Dialog.Panel className='relative bg-gray-200 rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:max-w-6xl sm:w-full font-primary  sm:p-6'>
                 {/* ====== cancel btn */}
                 <div
-                  className='absolute right-5 text-gray-600 hover:text-clr-1 cursor-pointer rounded py-1 px-2 shadow-sm border border-red-400'
+                  className='close__btn'
                   onClick={() => setState((state) => !state)}
                 >
                   <p>cancel</p>
@@ -83,7 +83,7 @@ export default function PopAddStaff({ state, setState }) {
                                       name='first-name'
                                       id='first-name'
                                       autoComplete='given-name'
-                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
 
@@ -100,7 +100,7 @@ export default function PopAddStaff({ state, setState }) {
                                       name='last-name'
                                       id='last-name'
                                       autoComplete='family-name'
-                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
 
@@ -117,42 +117,80 @@ export default function PopAddStaff({ state, setState }) {
                                       name='other-names'
                                       id='other-names'
                                       autoComplete='family-name'
-                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
 
-                                  {/* ====== other names */}
+                                  {/* ====== department*/}
                                   <div className='col-span-6 sm:col-span-3'>
                                     <label
-                                      htmlFor='staff-role'
+                                      htmlFor='department'
                                       className='block text-sm font-medium text-gray-700'
                                     >
-                                      Staff role
+                                      Department
                                     </label>
                                     <input
                                       type='text'
-                                      name='staff-role'
-                                      id='staff-role'
+                                      name='department'
+                                      id='department'
                                       autoComplete='family-name'
-                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
 
-                                  {/* ====== email field */}
-                                  <div className='col-span-6 sm:col-span-4'>
+                                  {/* ====== Staff Id */}
+                                  <div className='col-span-6 sm:col-span-3'>
                                     <label
-                                      htmlFor='email-address'
+                                      htmlFor='staff-id'
                                       className='block text-sm font-medium text-gray-700'
                                     >
-                                      Email address
+                                      Staff ID
                                     </label>
                                     <input
                                       type='text'
-                                      name='email-address'
-                                      id='email-address'
+                                      name='staff-id'
+                                      id='level'
                                       autoComplete='email'
-                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
+                                  </div>
+
+                                  {/* ====== Level */}
+                                  <div className='col-span-6 sm:col-span-2'>
+                                    <label
+                                      htmlFor='level'
+                                      className='block text-sm font-medium text-gray-700'
+                                    >
+                                      Level
+                                    </label>
+                                    <input
+                                      type='text'
+                                      name='level'
+                                      id='level'
+                                      autoComplete='email'
+                                      className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
+                                    />
+                                  </div>
+
+                                  {/* ====== Type of staff  */}
+                                  <div className='col-span-6 sm:col-span-3'>
+                                    <label
+                                      htmlFor='country'
+                                      className='block text-sm font-medium text-gray-700'
+                                    >
+                                      Type
+                                    </label>
+                                    <select
+                                      id='bank'
+                                      name='bank'
+                                      autoComplete='bank-name'
+                                      className='mt-1 block w-full py-2 px-3 border border-gray-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
+                                    >
+                                      <option value='staff'>Staff</option>
+                                      <option value='3rd party'>
+                                        3rd Party
+                                      </option>
+                                    </select>
                                   </div>
                                 </div>
                               </div>
@@ -197,28 +235,25 @@ export default function PopAddStaff({ state, setState }) {
                                   name='acct-num'
                                   id='acct-num'
                                   autoComplete='email'
-                                  className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                  className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                 />
                               </div>
 
                               {/* ====== bank names */}
                               <div className='col-span-6 sm:col-span-3'>
                                 <label
-                                  htmlFor='country'
+                                  htmlFor='bank-name'
                                   className='block text-sm font-medium text-gray-700'
                                 >
                                   Bank name
                                 </label>
-                                <select
-                                  id='bank'
-                                  name='bank'
-                                  autoComplete='bank-name'
-                                  className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
-                                >
-                                  <option>United States</option>
-                                  <option>Canada</option>
-                                  <option>Mexico</option>
-                                </select>
+                                <input
+                                  type='text'
+                                  name='bank-name'
+                                  id='bank-name'
+                                  autoComplete='bank'
+                                  className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
+                                />
                               </div>
                               <div className='flex gap-3 col-span-4'>
                                 {' '}
@@ -235,7 +270,7 @@ export default function PopAddStaff({ state, setState }) {
                                     name='acct-type'
                                     id='acct-type'
                                     autoComplete='email'
-                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                   />
                                 </div>
                                 {/* ====== bank code */}
@@ -251,7 +286,7 @@ export default function PopAddStaff({ state, setState }) {
                                     name='bank-code'
                                     id='bank-code'
                                     autoComplete='email'
-                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
+                                    className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                   />
                                 </div>
                               </div>

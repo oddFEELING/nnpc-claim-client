@@ -1,19 +1,23 @@
-import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
+import { staffStore } from '../../../global/staff.global';
+import PopStaff from '../../lib/pop-ups/popStaff';
 import PopDelete from '../../lib/pop-ups/popDelete';
 import { people } from '../../../static/data/dashStaff.data';
 import { PlusIcon, TrashIcon } from '@heroicons/react/solid';
 import PopAddStaff from '../../lib/pop-ups/popAddStaff.jsx';
 
 export default function Example() {
-  const [selectedStaff, setSelecetdStaff] = useState({});
-  const [popDeleteOpen, setPopDeleteOpen] = useState(false);
+  const { setStaff, staff } = staffStore();
   const [popAddOpen, setPopAddOpen] = useState(false);
+  const [popStaffOpen, setPopStaffOpen] = useState(false);
+  const [popDeleteOpen, setPopDeleteOpen] = useState(false);
 
-  // ======= Effect to check selected staff -->
-  useEffect(() => {
-    console.log(selectedStaff);
-  }, [selectedStaff]);
+  // ======= handler to view staff -->
+  const handleViewStaff = (person) => {
+    setStaff(person);
+    setPopStaffOpen((state) => !state);
+  };
 
   return (
     <div>
@@ -31,6 +35,9 @@ export default function Example() {
       {popAddOpen && (
         <PopAddStaff state={popAddOpen} setState={setPopAddOpen} />
       )}
+
+      {/* ====== Staff info pop-up */}
+      {<PopStaff state={popStaffOpen} setState={setPopStaffOpen} />}
 
       {/* ====== Section header */}
       <div className='bg-white px-4 py-5 border-b border-gray-200 sm:px-6 mb-1'>
@@ -53,7 +60,7 @@ export default function Example() {
       </div>
 
       {/* ====== Div holding the staff list */}
-      <div className='bg-gray-100 py-5 px-3 rounded-md overflow-y-scroll h-[800px]'>
+      <div className='bg-gray-100 py-12 px-3 rounded-md overflow-y-scroll max-h-[800]'>
         <ul
           role='list'
           className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'
@@ -65,9 +72,7 @@ export default function Example() {
             >
               <div
                 className='w-full hover:bg-gray-100 cursor-pointer flex items-center justify-between p-6 space-x-6'
-                onClick={() => {
-                  setSelecetdStaff(person);
-                }}
+                onClick={() => handleViewStaff(person)}
               >
                 <div className='flex-1 truncate'>
                   <div className='flex items-center space-x-3'>
@@ -75,14 +80,14 @@ export default function Example() {
                       {person.first_name} {person.last_name}
                     </h3>
                     <span className='flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-green-100 rounded-full'>
-                      {person.role}
+                      {person.department}
                     </span>
                   </div>
                   <p className='mt-1 text-gray-900 text-sm truncate font-secondary'>
-                    {person.bank}:
+                    {person.account.bank}:
                   </p>
                   <p className='mt-1 text-gray-500 text-sm truncate font-secondary'>
-                    {person.acct_no}
+                    {person.account.acct_no}
                   </p>
                 </div>
                 <div className='w-10 h-10 bg-gray-300 rounded-full flex-shrink-0 relative overflow-hidden'>
