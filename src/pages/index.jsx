@@ -1,18 +1,30 @@
 import Head from 'next/head';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
+import useFetch from '../hooks/useFetch';
+import PopSuccess from '../components/lib/pop-ups/popSuccess';
+import { useState, useEffect } from 'react';
+import { authStore } from '../global/auth.global';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
 
 export default function Home() {
   const router = useRouter();
-  const [secret, setSecret] = useState('');
   const [visible, setVisible] = useState(false);
-  const [alert, setAlert] = useState(false);
+  const { setSecret, secret_ID } = authStore();
+  const [success, setsuccess] = useState(false);
+  const { data, status, isLoading, refetch, error } = useFetch('ADMIN-LOGIN');
 
   // ======= onchange secret field -->
   const onSecretChange = (e) => {
-    setSecret(() => e.target.value.toUpperCase());
+    setSecret(e.target.value);
   };
+
+  useEffect(() => {
+    if (status === 'success') {
+      setsuccess(true);
+    }
+
+    error && alert(error.message);
+  }, [status]);
 
   return (
     <div className='w-full min-h-screen bg-gray-200 flex items-center justify-center'>
@@ -46,7 +58,7 @@ export default function Home() {
           <input
             className='px-9 py-3 h-12 w-96 border-none rounded-md focus:outline-clr-4 font-secondary bg-gray-200 shadow-sm'
             type={visible ? 'text' : 'password'}
-            value={secret}
+            value={secret_ID}
             onChange={onSecretChange}
             placeholder='Secret ID'
           />
@@ -55,10 +67,19 @@ export default function Home() {
         {/* ====== generate token key */}
         <button
           className='w-52 h-12 font-primary bg-clr-4 text-gray-200 shadow-md rounded text-lg'
-          onClick={() => router.push('/dashboard')}
+          onClick={refetch}
         >
           Generate token
         </button>
+        {isLoading && <p className='-mt-7'>loading...</p>}
+
+        <PopSuccess
+          title='Success'
+          content='A onr time password (OTP) has been sent to your email!'
+          state={success}
+          setState={setsuccess}
+          action={() => router.push('/dashboard')}
+        />
       </main>
     </div>
   );

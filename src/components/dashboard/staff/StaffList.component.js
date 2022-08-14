@@ -1,14 +1,20 @@
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { staffStore } from '../../../global/staff.global';
 import PopStaff from '../../lib/pop-ups/popStaff';
 import PopDelete from '../../lib/pop-ups/popDelete';
 import { people } from '../../../static/data/dashStaff.data';
 import { PlusIcon, TrashIcon } from '@heroicons/react/solid';
 import PopAddStaff from '../../lib/pop-ups/popAddStaff.jsx';
+import { claimStore } from '../../../global/claim.global';
+import { navStore } from '../../../global/nav.global';
+import { useRouter } from 'next/router';
 
 export default function Example() {
-  const { setStaff, staff } = staffStore();
+  const router = useRouter();
+  const { setClaim, claim } = claimStore();
+  const { setStaff } = staffStore();
+  const { setCurrent } = navStore();
   const [popAddOpen, setPopAddOpen] = useState(false);
   const [popStaffOpen, setPopStaffOpen] = useState(false);
   const [popDeleteOpen, setPopDeleteOpen] = useState(false);
@@ -17,6 +23,18 @@ export default function Example() {
   const handleViewStaff = (person) => {
     setStaff(person);
     setPopStaffOpen((state) => !state);
+  };
+
+  {
+    /* ====== hablder for create claim */
+  }
+  const handleCreateClaim = (person) => {
+    setClaim({
+      state: 'new',
+      staff: person,
+    });
+    setCurrent('Claims');
+    router.replace('claims');
   };
 
   return (
@@ -103,7 +121,10 @@ export default function Example() {
               {/* ====== Buttons section */}
               <div>
                 <div className='-mt-px flex divide-x divide-gray-200'>
-                  <div className='w-0 flex-1 flex'>
+                  <div
+                    className='w-0 flex-1 flex'
+                    onClick={() => handleCreateClaim(person)}
+                  >
                     <p className='relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border cursor-pointer border-transparent rounded-bl-lg hover:text-clr-4'>
                       <PlusIcon
                         className='w-5 h-5 text-gray-400'

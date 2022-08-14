@@ -1,23 +1,32 @@
 import {
   CalendarIcon,
-  LocationMarkerIcon,
+  OfficeBuildingIcon,
   UsersIcon,
 } from '@heroicons/react/solid';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { claimStore } from '../../../global/claim.global';
 import { navStore } from '../../../global/nav.global';
-import { positions } from '../../../static/data/dashClaim.data';
+import { staffStore } from '../../../global/staff.global';
+import { claims } from '../../../static/data/dashClaim.data';
 
 export default function Open() {
   const router = useRouter();
   const { setCurrent } = navStore();
-  const { setClaim } = claimStore();
+  const { setClaim, claim } = claimStore();
+  const { staff } = staffStore();
 
   // ======= handle create claim -->
   const handleCreate = () => {
     router.replace('staff');
     setCurrent('Staff');
   };
+
+  // ======= monitorc laim -->
+  useEffect(() => {
+    console.log(claim);
+  }, [claim]);
+
   return (
     <div className='w-full flex col-span-5 rounded-md shadow-sm flex-col lg:col-span-2'>
       <div className='bg-white px-4 py-5 border-b border-gray-200 sm:px-6 w-full'>
@@ -42,23 +51,30 @@ export default function Open() {
       {/* ====== content */}
       <div className='bg-white shadow overflow-hidden sm:rounded-md'>
         <ul role='list' className='divide-y divide-gray-200'>
-          {positions.map((position) => (
-            <li key={position.id}>
+          {claims.map((claim) => (
+            <li key={claim.id}>
               <div
-                className='block hover:bg-gray-100 cursor-pointer'
-                onClick={() => setClaim(position)}
+                className='block hover:bg-indigo-50 transition-all hover:shadow-md hover:scale-105 cursor-pointer'
+                onClick={() => setClaim(claim)}
               >
                 <div className='px-4 py-4 sm:px-6'>
                   <div className='flex items-center justify-between'>
                     <p className='text-sm font-medium text-indigo-600 truncate'>
-                      {position.title}
+                      {claim.title}
                     </p>
                     <div className='ml-2 flex-shrink-0 flex'>
                       <p className='px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800'>
-                        {position.type}
+                        {claim.state}
                       </p>
                     </div>
                   </div>
+
+                  <div>
+                    <p className='text-gray-600 text-md font-bold font-secondary'>
+                      {claim.payb_amt}
+                    </p>
+                  </div>
+
                   <div className='mt-2 sm:flex sm:justify-between'>
                     <div className='sm:flex'>
                       <p className='flex items-center text-sm text-gray-500'>
@@ -66,14 +82,14 @@ export default function Open() {
                           className='flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400'
                           aria-hidden='true'
                         />
-                        {position.department}
+                        {staff?.first_name || 'No staff'}
                       </p>
                       <p className='mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6'>
-                        <LocationMarkerIcon
+                        <OfficeBuildingIcon
                           className='flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400'
                           aria-hidden='true'
                         />
-                        {position.location}
+                        {staff?.account?.bank || 'No staff'}
                       </p>
                     </div>
                     <div className='mt-2 flex items-center text-sm text-gray-500 sm:mt-0'>
@@ -82,10 +98,7 @@ export default function Open() {
                         aria-hidden='true'
                       />
                       <p>
-                        Closing on{' '}
-                        <time dateTime={position.closeDate}>
-                          {position.closeDateFull}
-                        </time>
+                        {claim.duration.from} -- {claim.duration.to}
                       </p>
                     </div>
                   </div>

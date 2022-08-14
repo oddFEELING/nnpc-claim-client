@@ -7,10 +7,10 @@ export default function Manage() {
   return (
     <div className='flex items-center col-span-5 lg:col-span-3'>
       {/* ====== If there is no claim */}
-      {!claim.title && <NoClaim />}
+      {!claim.state && <NoClaim />}
 
       {/* ====== if there is a claim selected */}
-      {claim.title && <FoundClaim />}
+      {claim.state && <FoundClaim />}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/outline';
 
@@ -9,8 +9,6 @@ export default function PopSuccess({
   setState,
   action,
 }) {
-  const [open, setOpen] = useState(true);
-
   return (
     <Transition.Root show={state} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={setState}>
@@ -50,13 +48,10 @@ export default function PopSuccess({
                       as='h3'
                       className='text-lg leading-6 font-medium text-gray-900'
                     >
-                      Payment successful
+                      {title}
                     </Dialog.Title>
                     <div className='mt-2'>
-                      <p className='text-sm text-gray-500'>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Consequatur amet labore.
-                      </p>
+                      <p className='text-sm text-gray-500'>{content}</p>
                     </div>
                   </div>
                 </div>
@@ -64,9 +59,9 @@ export default function PopSuccess({
                   <button
                     type='button'
                     className='inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm'
-                    onClick={() => setState((state) => !state)}
+                    onClick={action}
                   >
-                    Go to Dashboard
+                    Continue
                   </button>
                 </div>
               </Dialog.Panel>

@@ -1,18 +1,37 @@
-import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import useFetch from '../../hooks/useFetch';
+import React, { useState, useEffect } from 'react';
 import { navStore } from '../../global/nav.global';
+import { authStore } from '../../global/auth.global';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/outline';
+import PopSuccess from '../../components/lib/pop-ups/popSuccess';
 
 const Index = () => {
-  const { current } = navStore();
   const router = useRouter();
+  const { current } = navStore();
+  const { otp, setOTP, secret_ID, setAuth } = authStore();
   const [visible, setVisible] = useState(false);
-  const [token, setToken] = useState('');
+  const [success, setSuccess] = useState(false);
+  const { data, status, isLoading, refetch, error } = useFetch('ADMIN-CONFIRM');
 
   // ======= handle token change -->
   const onTokenChange = (e) => {
-    setToken(e.target.value);
+    setOTP(e.target.value);
   };
+
+  // ======= check for data -->
+  useEffect(() => {
+    secret_ID === '' && router.replace('/');
+
+    // ======= save token to local storage -->
+    if (status === 'success') {
+      setAuth(true);
+      setSuccess(true);
+      const token = data.data.data;
+      localStorage.setItem('token', token);
+    }
+  }, [status]);
+
   return (
     <div className='h-screen flex w-full  items-center justify-center'>
       {/* ====== main form */}
@@ -36,7 +55,7 @@ const Index = () => {
           <input
             className='px-9 py-3 h-12 w-96 border-none focus:outline-clr-4 font-secondary rounded-md bg-gray-200 shadow-sm'
             type={visible ? 'text' : 'password'}
-            value={token}
+            value={otp}
             onChange={onTokenChange}
             placeholder='Secret OTP'
           />
@@ -44,10 +63,18 @@ const Index = () => {
         {/* ====== Button section */}{' '}
         <button
           className='w-52 h-12 font-primary  bg-clr-4 text-gray-200 shadow-md rounded text-lg'
-          onClick={() => router.push(`/dashboard/${current.toLowerCase()}`)}
+          onClick={refetch}
         >
           Authenticate
         </button>
+        {isLoading && <p>loading...</p>}
+        <PopSuccess
+          title='login Successful'
+          content='You have completed the login process. click continue to access dashboard'
+          state={success}
+          setState={setSuccess}
+          action={() => router.push(`/dashboard/${current.toLowerCase()}`)}
+        />
       </main>
     </div>
   );

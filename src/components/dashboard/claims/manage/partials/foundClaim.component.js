@@ -168,7 +168,7 @@ export default function FoundClaim() {
                   name='bank-name'
                   id='bank-name'
                   disabled
-                  value={staff ? staff.account?.bank : 'null'}
+                  value={claim?.staff.account?.bank || 'null'}
                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                 />
               </div>
@@ -186,7 +186,7 @@ export default function FoundClaim() {
                   name='acct_no'
                   id='acct_no'
                   disabled
-                  value={staff ? staff.account?.acct_no : 'null'}
+                  value={claim?.staff.account?.acct_no || 'null'}
                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                 />
               </div>
@@ -205,9 +205,8 @@ export default function FoundClaim() {
                   id='full-name'
                   disabled
                   value={
-                    staff
-                      ? `${staff.first_name} ${staff.last_name} ${staff.middle_name}`
-                      : 'null'
+                    `${claim?.staff.first_name} ${claim?.staff.last_name} ${claim?.staff.middle_name}` ||
+                    'null'
                   }
                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                 />
@@ -225,7 +224,7 @@ export default function FoundClaim() {
                   type='text'
                   name='acct_type'
                   disabled
-                  value={staff ? staff.account?.acct_type : 'null'}
+                  value={claim?.staff.account?.acct_type || 'null'}
                   id='acct_type'
                   autoComplete='address-level2'
                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
@@ -245,7 +244,7 @@ export default function FoundClaim() {
                   name='bank-code'
                   id='bank-code'
                   disabled
-                  value={staff ? staff.account?.bank_code : 'null'}
+                  value={claim?.staff.account?.bank_code || 'null'}
                   autoComplete='address-level1'
                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                 />
@@ -264,7 +263,7 @@ export default function FoundClaim() {
                   name='staff-type'
                   id='staff-type'
                   disabled
-                  value={staff ? staff.type : 'null'}
+                  value={claim?.staff.type || 'null'}
                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
                 />
               </div>
@@ -292,13 +291,13 @@ export default function FoundClaim() {
               </legend>
               <p className='text-md text-gray-500'>
                 Calculated VAT is: &nbsp; &nbsp;
-                {staff && staff.type === '3rd party' && (
+                {claim && claim.staff.type === '3rd party' && (
                   <b className='font-bold font-primary text-red-400'>#5,000</b>
                 )}
-                {staff && staff.type === 'staff' && (
+                {claim && claim.staff.type === 'staff' && (
                   <b className='font-bold font-primary text-green-600'>#0</b>
                 )}
-                {!staff && 'null'}
+                {!claim?.staff && 'null'}
               </p>
             </fieldset>
 
@@ -309,13 +308,13 @@ export default function FoundClaim() {
               </legend>
               <p className='text-md text-gray-500'>
                 Calculated WHT is: &nbsp; &nbsp;
-                {staff && staff.type === '3rd party' && (
+                {claim && claim.staff.type === '3rd party' && (
                   <b className='font-bold font-primary text-red-400'>#5,000</b>
                 )}
-                {staff && staff.type === 'staff' && (
+                {claim && claim.staff.type === 'staff' && (
                   <b className='font-bold font-primary text-green-600'>#0</b>
                 )}
-                {!staff && 'null'}
+                {!claim?.staff && 'null'}
               </p>
             </fieldset>
 
@@ -344,7 +343,7 @@ export default function FoundClaim() {
           type='submit'
           className='ml-3 inline-flex justify-center py-3 md:py-2 w-2/3 md:w-auto px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
         >
-          Save claim
+          {claim.state === 'new' ? 'Open' : 'save'} claim
         </button>
 
         <button
@@ -358,7 +357,7 @@ export default function FoundClaim() {
           type='submit'
           className='ml-3 inline-flex justify-center py-3 md:py-2 w-2/3 md:w-auto px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
         >
-          close claim
+          Close claim
         </button>
       </div>
     </form>
