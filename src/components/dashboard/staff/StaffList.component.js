@@ -33,8 +33,9 @@ export default function StaffListCOmponent() {
   const handleCreateClaim = (person) => {
     setClaim({
       state: 'new',
-      staff: person,
+      staff: person._id,
     });
+    setStaff(person);
     setCurrent('Claims');
     router.replace('claims');
   };

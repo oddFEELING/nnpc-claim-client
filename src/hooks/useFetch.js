@@ -8,6 +8,7 @@ const useFetch = (target, payload) => {
   const { otp, secret_ID, token } = authStore();
 
   switch (target) {
+    //=============================================> # ADMIN
     // ======= Admin login -->
     // ======= {secret_ID} -->
     case 'ADMIN-LOGIN':
@@ -50,6 +51,7 @@ const useFetch = (target, payload) => {
           )
       ));
 
+    //=============================================>  # STAFF
     // ======= Get all staff -->
     // ======= jwt token -->
     case 'GET-STAFF':
@@ -64,17 +66,38 @@ const useFetch = (target, payload) => {
         { staleTime: 10000, refetchInterval: 10000 }
       ));
 
+    // ======= Get staff by id-->
+    // ======= jwt token, staff id -->
+    case 'GET-STAFF-BY-ID':
+      return (Query = useQuery(
+        'GET SINGLE STAFF',
+        async () =>
+          await axios.get(
+            `https://nnpc-caim-server.herokuapp.com/staff/${payload}`,
+            {
+              headers: {
+                authorization: `BEARER ${token}`,
+              },
+            }
+          ),
+        { staleTime: 10000, refetchInterval: 10000 }
+      ));
+
     // ======= Add new staff -->
-    // ======= jwt token staffData -->
+    // ======= jwt token ,staffData -->
     case 'ADD-STAFF':
       return (Query = useQuery(
         'ADD NEW STAFF',
         async () =>
-          await axios.post('http://localhost:8080/staff', payload, {
-            headers: {
-              authorization: `BEARER ${token}`,
-            },
-          }),
+          await axios.post(
+            'https://nnpc-caim-server.herokuapp.com/staff',
+            payload,
+            {
+              headers: {
+                authorization: `BEARER ${token}`,
+              },
+            }
+          ),
         {
           enabled: false,
           refetchOnWindowFocus: false,
@@ -84,20 +107,49 @@ const useFetch = (target, payload) => {
       ));
 
     // ======= Delete staff -->
-    // ======= jwt token staff id to delete -->
+    // ======= jwt token, staff id to delete -->
     case 'DELETE-STAFF':
       return (Query = useQuery(
         'DELETE SINGLE STAFF',
         async () =>
-          await axios.delete(`http://localhost:8080/staff/${payload}`, {
+          await axios.delete(
+            `https://nnpc-caim-server.herokuapp.com/${payload}`,
+            {
+              headers: {
+                authorization: `BEARER ${token}`,
+              },
+            }
+          ),
+        { enabled: false, staleTime: Infinity }
+      ));
+
+    //=============================================>  # CLAIMS
+    /* ====== Get all claims */
+    /* ====== jwt token  */
+    case 'GET-CLAIMS':
+      return (Query = useQuery(
+        'GET ALL CLAIMS',
+        async () =>
+          await axios.get(`http://localhost:8080/claims/`, {
             headers: {
               authorization: `BEARER ${token}`,
             },
           }),
-        {
-          enabled: false,
-          staleTime: Infinity,
-        }
+        { staleTime: 10000, refetchInterval: 10000 }
+      ));
+
+    /* ====== Create new claim */
+    /* ====== jwt token, claim data */
+    case 'CREATE-CLAIM':
+      return (Query = useQuery(
+        'CREATE NEW CLAIM',
+        async () =>
+          await axios.post(`http://localhost:8080/claims/`, payload, {
+            headers: {
+              authorization: `BEARER ${token}`,
+            },
+          }),
+        { enabled: false, staleTime: Infinity }
       ));
 
     default:

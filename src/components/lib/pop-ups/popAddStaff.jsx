@@ -59,11 +59,6 @@ export default function PopAddStaff({ state, setState }) {
     }
   }, [Query.data]);
 
-  // ======= check new staff -->
-  useEffect(() => {
-    console.log(newStaff);
-  }, [newStaff]);
-
   return (
     <Transition.Root show={state} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={setState}>
