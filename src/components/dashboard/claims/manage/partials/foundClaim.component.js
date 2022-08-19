@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-
+import AlertSuccess from '../../../../lib/alerts/alertSuccess.component';
+import AlertError from '../../../../lib/alerts/alertError.component';
 import { staffStore } from '../../../../../global/staff.global';
 import { claimStore } from '../../../../../global/claim.global';
 import claimCalc from './claimLogic';
@@ -10,6 +11,7 @@ export default function FoundClaim() {
   const { claim, editClaim } = claimStore();
   const [claimStaff, setClaimStaff] = useState({});
   const createClaimQuery = useFetch('CREATE-CLAIM', claim);
+  const deleteClaimQuery = useFetch('DELETE-CLAIM', claim._id);
   const claimDeduct = new claimCalc(
     claim.gross_amt,
     typeof claim.staff === 'string' && staff && staff.type === 'staff'
@@ -18,35 +20,56 @@ export default function FoundClaim() {
       ? true
       : false
   );
-
+  const [successAlertOpen, setSuccessAlertOpen] = useState(false);
+  const [errorAlertOpen, setErrorAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const claimStaffQuery = useFetch('GET-STAFF-BY-ID', claim.staff);
+
   /* ====== Handle create claim */
   const handleCreateClaim = (e) => {
     e.preventDefault();
     createClaimQuery.refetch();
   };
 
+  /* ====== handle delete claim */
+  const handleDeleteClaim = (e) => {
+    e.preventDefault();
+    deleteClaimQuery.refetch();
+  };
+
   /* ====== check claim create status */
   useEffect(() => {
     if (createClaimQuery.status === 'success') {
-      console.log(createClaimQuery.data.data);
+      setAlertMessage('Claim created successfully!');
+      setSuccessAlertOpen(true);
       createClaimQuery.remove();
     }
 
     if (createClaimQuery.status === 'error') {
+      setAlertMessage('Error creating claim');
+      setErrorAlertOpen(true);
       console.log(createClaimQuery.error);
     }
-  }, [createClaimQuery.status]);
+
+    if (deleteClaimQuery.status === 'success') {
+      setAlertMessage('Claim deleted!');
+      setSuccessAlertOpen(true);
+      deleteClaimQuery.remove();
+    }
+  }, [createClaimQuery.status, deleteClaimQuery.status]);
 
   /* ====== check claim staff status */
   useEffect(() => {
-    if (typeof claim.staff === 'string') {
-      if (claimStaffQuery.status === 'success') {
-        setClaimStaff(claimStaffQuery.data.data.data);
-      }
+    if (
+      typeof claim.staff === 'string' &&
+      claimStaffQuery.status === 'success'
+    ) {
+      setClaimStaff(claimStaffQuery.data.data.data);
     } else setClaimStaff(claim.staff);
 
-    if (claimStaffQuery.status === 'error') {
+    if (typeof claim.staff === 'strimg' && claimStaffQuery.status === 'error') {
+      setAlertMessage('Error Getting claim user');
+      setErrorAlertOpen(true);
       console.log(claimStaffQuery.error);
     }
   }, [claimStaffQuery.status, claimStaffQuery.data, claim]);
@@ -60,6 +83,18 @@ export default function FoundClaim() {
 
   return (
     <form className='space-y-6 w-full ' action='#' method='POST'>
+      {/* ====== error alerts */}
+      <AlertError
+        message={alertMessage}
+        state={errorAlertOpen}
+        setState={setErrorAlertOpen}
+      />
+      {/* ====== success alerts */}
+      <AlertSuccess
+        message={alertMessage}
+        state={successAlertOpen}
+        setState={setSuccessAlertOpen}
+      />
       <div className='bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6'>
         <div className='md:grid md:grid-cols-3 md:gap-6'>
           <div className='md:col-span-1'>
@@ -271,7 +306,6 @@ export default function FoundClaim() {
           </div>
         </div>
       </div>
-
       {/* ====== Account info section */}
       <div className='bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6'>
         <div className='md:grid md:grid-cols-3 md:gap-6'>
@@ -401,7 +435,6 @@ export default function FoundClaim() {
           </div>
         </div>
       </div>
-
       {/* ====== VAT and WHT section */}
       <div className='bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6'>
         <div className='md:grid md:grid-cols-3 md:gap-6'>
@@ -467,7 +500,6 @@ export default function FoundClaim() {
           </div>
         </div>
       </div>
-
       <div className='flex flex-col md:flex-row gap-4 md:gap-1 md:justify-end items-center'>
         {claim.state === 'new' && (
           <button
@@ -498,10 +530,26 @@ export default function FoundClaim() {
         {claim.state === 'open' && (
           <button
             type='submit'
-            className='ml-3 inline-flex justify-center py-3 md:py-2 w-2/3 md:w-auto px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+            className='ml-3 inline-flex justify-center py-3 md:py-2 w-2/3 md:w-auto px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
           >
             Close claim
           </button>
+        )}
+
+        {claim.state === 'open' && (
+          <button
+            type='submit'
+            className='ml-3 inline-flex justify-center py-3 md:py-2 w-2/3 md:w-auto px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+            onClick={handleDeleteClaim}
+          >
+            Delete claim
+          </button>
+        )}
+
+        {createClaimQuery.isLoading && (
+          <p className='ml-4 font-secondary text-indigo-600 font-bod'>
+            Loading...
+          </p>
         )}
       </div>
     </form>

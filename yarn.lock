@@ -32,6 +32,18 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@grapecity/spread-sheets-react@^15.1.4":
+  version "15.1.4"
+  resolved "https://registry.yarnpkg.com/@grapecity/spread-sheets-react/-/spread-sheets-react-15.1.4.tgz#b36247dc62127f44f859b4d8c1bd177f26168af2"
+  integrity sha512-N637IYVUtcADPmuzEECaneZbFheeds0g6N+oUWir48/iusIpWhynp41ltbjXGp+76PxtZySSSMTx8UyWrPGpXA==
+  dependencies:
+    "@grapecity/spread-sheets" "15.1.4"
+
+"@grapecity/spread-sheets@15.1.4", "@grapecity/spread-sheets@^15.1.4":
+  version "15.1.4"
+  resolved "https://registry.yarnpkg.com/@grapecity/spread-sheets/-/spread-sheets-15.1.4.tgz#ceae87fc0382e3f21dcc6a595814fb6be833a4c5"
+  integrity sha512-mFo2y0mLuU+3iZy4Z+Vjwa8ag0Tkuq+KGS2vaV+hUdtzgmwPSlelyYuQFUf9oxJzyGiD8N1yZS3kdlH6kazIZw==
+
 "@headlessui/react@^1.6.6":
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/@headlessui/react/-/react-1.6.6.tgz#3073c066b85535c9d28783da0a4d9288b5354d0c"

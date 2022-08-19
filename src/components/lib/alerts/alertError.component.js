@@ -11,7 +11,7 @@ export default function AlertError({ message, state, setState }) {
   return (
     <>
       {state && (
-        <div className='fixed bottom-5 right-5 z-50  rounded-md bg-red-50 p-4'>
+        <div className='fixed bottom-5 right-5 z-50 rounded-md bg-red-50 p-4 w-2/3 md:w-1/3'>
           <div className='flex'>
             <div className='flex-shrink-0'>
               <XCircleIcon

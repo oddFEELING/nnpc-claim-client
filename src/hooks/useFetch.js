@@ -113,7 +113,7 @@ const useFetch = (target, payload) => {
         'DELETE SINGLE STAFF',
         async () =>
           await axios.delete(
-            `https://nnpc-caim-server.herokuapp.com/${payload}`,
+            `https://nnpc-caim-server.herokuapp.com/staff/${payload}`,
             {
               headers: {
                 authorization: `BEARER ${token}`,
@@ -130,7 +130,7 @@ const useFetch = (target, payload) => {
       return (Query = useQuery(
         'GET ALL CLAIMS',
         async () =>
-          await axios.get(`http://localhost:8080/claims/`, {
+          await axios.get(`https://nnpc-caim-server.herokuapp.com/claims/`, {
             headers: {
               authorization: `BEARER ${token}`,
             },
@@ -144,11 +144,32 @@ const useFetch = (target, payload) => {
       return (Query = useQuery(
         'CREATE NEW CLAIM',
         async () =>
-          await axios.post(`http://localhost:8080/claims/`, payload, {
-            headers: {
-              authorization: `BEARER ${token}`,
-            },
-          }),
+          await axios.post(
+            `https://nnpc-caim-server.herokuapp.com/claims/`,
+            payload,
+            {
+              headers: {
+                authorization: `BEARER ${token}`,
+              },
+            }
+          ),
+        { enabled: false, staleTime: Infinity }
+      ));
+
+    // ======= Delete claim -->
+    // ======= jwt token, claim id to delete -->
+    case 'DELETE-CLAIM':
+      return (Query = useQuery(
+        'DELETE SINGLE CLAIM',
+        async () =>
+          await axios.delete(
+            `https://nnpc-caim-server.herokuapp.com/claims/${payload}`,
+            {
+              headers: {
+                authorization: `BEARER ${token}`,
+              },
+            }
+          ),
         { enabled: false, staleTime: Infinity }
       ));
 

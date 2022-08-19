@@ -2,7 +2,9 @@ import create from 'zustand';
 
 export const claimStore = create((set) => ({
   claim: {},
+  reportClaim: {},
   setClaim: (payload) => set({ claim: payload }),
+  setReportClaim: (payload) => set({ reportClaim: payload }),
   editClaim: (
     key,
     payload,
@@ -72,4 +74,9 @@ the key is the key of the entry
 the payload is the value of the entry 
 the nuimber is a boolean that indicates if the entry is a number or string
 The layers indicate the nesting level. the function cna nest up to 3 levels deep.
+*/
+
+/*
+claim is the regular claim for activities
+report claim is for report generating
 */
