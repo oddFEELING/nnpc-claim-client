@@ -1,8 +1,69 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from 'react';
+import useFetch from '../../../hooks/useFetch';
+import { Fragment, useState, useEffect, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
 export default function PopAddStaff({ state, setState }) {
+  const staffForm1 = useRef();
+  const staffForm2 = useRef();
+  const [newStaff, setNewStaff] = useState({ type: 'staff' });
+  const Query = useFetch('ADD-STAFF', newStaff);
+
+  // ======= handler for staff detail change -->
+  const handleNewStaffChange =
+    (payload, layer, number = false) =>
+    (event) => {
+      /*
+      This sets the values of the object
+      if there is layer then it can nest 2 levels deep
+      else its just a key - value pair at one level
+      */
+      layer
+        ? // if there is layer
+          setNewStaff({
+            ...newStaff,
+            [layer]: {
+              ...newStaff[layer],
+              [payload]: number
+                ? Number(event.target.value)
+                : event.target.value,
+            },
+          })
+        : // no layer
+          setNewStaff({
+            ...newStaff,
+            // prettier-ignore
+            [payload]: number
+              ? Number(event.target.value)
+              : event.target.value,
+          });
+    };
+
+  // ======= handle staff submit -->
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    Query.refetch();
+  };
+
+  // ======= check query status -->
+  useEffect(() => {
+    if (Query.isSuccess) {
+      staffForm1.current.reset();
+      staffForm2.current.reset();
+      alert('Staff Added!');
+      setState(false);
+      Query.remove();
+    }
+
+    if (Query.status === 'error') {
+      console.log(error);
+    }
+  }, [Query.data]);
+
+  // ======= check new staff -->
+  useEffect(() => {
+    console.log(newStaff);
+  }, [newStaff]);
+
   return (
     <Transition.Root show={state} as={Fragment}>
       <Dialog as='div' className='relative z-10' onClose={setState}>
@@ -51,7 +112,6 @@ export default function PopAddStaff({ state, setState }) {
                 {/* ====== form */}
                 <>
                   <div>
-                    {' '}
                     {/* ====== personal information */}
                     <div className='mt-10 sm:mt-0'>
                       <div className='md:grid md:grid-cols-3 md:gap-6'>
@@ -66,7 +126,7 @@ export default function PopAddStaff({ state, setState }) {
                           </div>
                         </div>
                         <div className='mt-5 md:mt-0 md:col-span-2'>
-                          <form action='#' method='POST'>
+                          <form action='#' method='POST' ref={staffForm1}>
                             <div className='shadow overflow-hidden sm:rounded-md'>
                               <div className='px-4 py-5 bg-white sm:p-6'>
                                 <div className='grid grid-cols-6 gap-6'>
@@ -82,7 +142,9 @@ export default function PopAddStaff({ state, setState }) {
                                       type='text'
                                       name='first-name'
                                       id='first-name'
-                                      autoComplete='given-name'
+                                      onChange={handleNewStaffChange(
+                                        'first_name'
+                                      )}
                                       className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
@@ -99,7 +161,9 @@ export default function PopAddStaff({ state, setState }) {
                                       type='text'
                                       name='last-name'
                                       id='last-name'
-                                      autoComplete='family-name'
+                                      onChange={handleNewStaffChange(
+                                        'last_name'
+                                      )}
                                       className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
@@ -116,7 +180,9 @@ export default function PopAddStaff({ state, setState }) {
                                       type='text'
                                       name='other-names'
                                       id='other-names'
-                                      autoComplete='family-name'
+                                      onChange={handleNewStaffChange(
+                                        'other_names'
+                                      )}
                                       className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
@@ -133,7 +199,9 @@ export default function PopAddStaff({ state, setState }) {
                                       type='text'
                                       name='department'
                                       id='department'
-                                      autoComplete='family-name'
+                                      onChange={handleNewStaffChange(
+                                        'department'
+                                      )}
                                       className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
@@ -150,7 +218,9 @@ export default function PopAddStaff({ state, setState }) {
                                       type='text'
                                       name='staff-id'
                                       id='level'
-                                      autoComplete='email'
+                                      onChange={handleNewStaffChange(
+                                        'staff_id'
+                                      )}
                                       className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
@@ -167,7 +237,7 @@ export default function PopAddStaff({ state, setState }) {
                                       type='text'
                                       name='level'
                                       id='level'
-                                      autoComplete='email'
+                                      onChange={handleNewStaffChange('level')}
                                       className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                     />
                                   </div>
@@ -183,7 +253,7 @@ export default function PopAddStaff({ state, setState }) {
                                     <select
                                       id='bank'
                                       name='bank'
-                                      autoComplete='bank-name'
+                                      onChange={handleNewStaffChange('type')}
                                       className='mt-1 block w-full py-2 px-3 border border-gray-400 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
                                     >
                                       <option value='staff'>Staff</option>
@@ -219,7 +289,7 @@ export default function PopAddStaff({ state, setState }) {
                         </div>
                       </div>
                       <div className='mt-5 md:mt-0 md:col-span-2'>
-                        <form action='#' method='POST'>
+                        <form action='#' method='POST' ref={staffForm2}>
                           <div className='shadow sm:rounded-md sm:overflow-hidden'>
                             <div className='px-4 py-5 bg-white space-y-3 sm:p-6 grid grid-cols-6 gap-6'>
                               {/* ====== Account number */}
@@ -234,7 +304,11 @@ export default function PopAddStaff({ state, setState }) {
                                   type='text'
                                   name='acct-num'
                                   id='acct-num'
-                                  autoComplete='email'
+                                  onChange={handleNewStaffChange(
+                                    'acct_no',
+                                    'account',
+                                    true
+                                  )}
                                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                 />
                               </div>
@@ -251,7 +325,10 @@ export default function PopAddStaff({ state, setState }) {
                                   type='text'
                                   name='bank-name'
                                   id='bank-name'
-                                  autoComplete='bank'
+                                  onChange={handleNewStaffChange(
+                                    'bank',
+                                    'account'
+                                  )}
                                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                 />
                               </div>
@@ -269,7 +346,11 @@ export default function PopAddStaff({ state, setState }) {
                                     type='text'
                                     name='acct-type'
                                     id='acct-type'
-                                    autoComplete='email'
+                                    onChange={handleNewStaffChange(
+                                      'acct_type',
+                                      'account',
+                                      true
+                                    )}
                                     className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                   />
                                 </div>
@@ -285,7 +366,11 @@ export default function PopAddStaff({ state, setState }) {
                                     type='text'
                                     name='bank-code'
                                     id='bank-code'
-                                    autoComplete='email'
+                                    onChange={handleNewStaffChange(
+                                      'bank_code',
+                                      'account',
+                                      true
+                                    )}
                                     className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-400 rounded-md'
                                   />
                                 </div>
@@ -295,10 +380,12 @@ export default function PopAddStaff({ state, setState }) {
                               <div className='px-4 py-3 bg-gray-50 text-right sm:px-6 col-span-6'>
                                 <button
                                   type='submit'
+                                  onClick={handleSubmit}
                                   className='inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
                                 >
                                   Add Staff
                                 </button>
+                                {Query.isLoading && <p>loading...</p>}
                               </div>
                             </div>
                           </div>

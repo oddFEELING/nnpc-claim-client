@@ -1,29 +1,66 @@
-import { Fragment, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { navStore } from '../global/nav.global';
-import { Dialog, Menu, Transition } from '@headlessui/react';
 import { SearchIcon } from '@heroicons/react/solid';
+import { Fragment, useState, useEffect } from 'react';
+import AlertSuccess from '../components/lib/alerts/alertSuccess.component';
+import { Dialog, Menu, Transition } from '@headlessui/react';
 import { XIcon, MenuAlt2Icon, BellIcon } from '@heroicons/react/outline';
 import { navOptions, userNavigation } from '../static/data/dashLayout.data';
+import useFetch from '../hooks/useFetch';
+import useAuth from '../hooks/useAuth';
+import { authStore } from '../global/auth.global';
+import { userStore } from '../global/user.global';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
 export default function DashLayout({ children }) {
+  useAuth();
   const router = useRouter();
+  const { setToken } = authStore();
+  const { user, setUser } = userStore();
   const { current, setCurrent } = navStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userFoundAlert, setUserFoundAlert] = useState(false);
+
+  const { data, status, isSuccess, isLoading, error, refetch } =
+    useFetch('GET-CURRENT-USER');
 
   // ======= check for current nav state -->
   useEffect(() => {
     const sessionState = sessionStorage.getItem('nav');
     sessionState && setCurrent(sessionState);
-  }, []);
+    refetch();
+
+    // ======= check for token -->
+    const currentToken = localStorage.getItem('token');
+    if (currentToken && currentToken.length > 5) setToken(currentToken);
+    else router.replace('/');
+  }, [status]);
+
+  // ======= check for data changes -->
+  useEffect(() => {
+    if (status === 'success') {
+      setUserFoundAlert(() => true);
+      setUser(data.data.data);
+    }
+  }, [status]);
+
+  // ======= check user status -->
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   return (
     <>
       <div>
+        {/* ====== User found success alert */}
+        <AlertSuccess
+          message='User Data loaded successfully!'
+          state={userFoundAlert}
+          setState={setUserFoundAlert}
+        />
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'
@@ -258,7 +295,10 @@ export default function DashLayout({ children }) {
               </div>
               <div className='max-w-7xl mx-auto px-4 sm:px-6 md:px-8'>
                 {/* Replace with your content */}
-                <div className='py-4'>{children}</div>
+                <div className='py-4'>
+                  {isLoading ? <p>Loading</p> : isSuccess && { ...children }}
+                  {error && <p>Error</p>}
+                </div>
                 {/* /End replace */}
               </div>
             </div>

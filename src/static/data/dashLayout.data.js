@@ -21,7 +21,7 @@ export const navOptions = [
 
 // ======= data specific to the user  -->
 export const userNavigation = [
-  { name: 'Your Profile', href: 'dashboard/user' },
-  { name: 'Settings', href: 'dashboard/settings' },
+  { name: 'Your Profile', href: 'profile' },
+  { name: 'Settings', href: 'settings' },
   { name: 'Sign out', href: '/' },
 ];

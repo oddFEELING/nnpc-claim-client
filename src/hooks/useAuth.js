@@ -7,6 +7,12 @@ const useAuth = () => {
   const { isAuthenticated } = authStore();
 
   useEffect(() => {
+    // TODO: Make this commented code check if from server if the token is authentic
+    // TODO: Duplicate code exists in useEffect() at layouts/DashLayout
+    // const currentToken = localStorage.getItem('token');
+    // if (currentToken && currentToken.length > 5) setToken(currentToken);
+    // else router.replace('/');
+
     if (!isAuthenticated) {
       router.replace('/');
       alert('No user found');

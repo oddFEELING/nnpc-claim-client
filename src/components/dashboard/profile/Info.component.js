@@ -1,6 +1,7 @@
-import { PaperClipIcon } from '@heroicons/react/solid';
+import { userStore } from '../../../global/user.global';
 
-export default function Example() {
+export default function InfoComponent() {
+  const { user } = userStore();
   return (
     <div className='bg-white shadow overflow-hidden sm:rounded-lg'>
       <div className='px-4 py-5 sm:px-6'>
@@ -17,7 +18,7 @@ export default function Example() {
           <div className='py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
             <dt className='text-sm font-medium text-gray-500'>Full name</dt>
             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-              Margot Foster
+              {user.full_name}
             </dd>
           </div>
 
@@ -25,7 +26,7 @@ export default function Example() {
           <div className='py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
             <dt className='text-sm font-medium text-gray-500'>Role</dt>
             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-              Admin
+              {user.role}
             </dd>
           </div>
 
@@ -33,16 +34,14 @@ export default function Example() {
           <div className='py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
             <dt className='text-sm font-medium text-gray-500'>Email address</dt>
             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-              margotfoster@example.com
+              {user.email}
             </dd>
           </div>
 
           <div className='py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'>
-            <dt className='text-sm font-medium text-gray-500'>
-              Salary expectation
-            </dt>
+            <dt className='text-sm font-medium text-gray-500'>Department</dt>
             <dd className='mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2'>
-              $120,000
+              {user.department}
             </dd>
           </div>
         </dl>

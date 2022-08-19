@@ -9,7 +9,7 @@ import PopSuccess from '../../components/lib/pop-ups/popSuccess';
 const Index = () => {
   const router = useRouter();
   const { current } = navStore();
-  const { otp, setOTP, secret_ID, setAuth } = authStore();
+  const { otp, setOTP, setToken, secret_ID, setAuth } = authStore();
   const [visible, setVisible] = useState(false);
   const [success, setSuccess] = useState(false);
   const { data, status, isLoading, refetch, error } = useFetch('ADMIN-CONFIRM');
@@ -29,6 +29,7 @@ const Index = () => {
       setSuccess(true);
       const token = data.data.data;
       localStorage.setItem('token', token);
+      setToken(token);
     }
   }, [status]);
 

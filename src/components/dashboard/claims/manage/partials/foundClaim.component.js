@@ -205,7 +205,7 @@ export default function FoundClaim() {
                   id='full-name'
                   disabled
                   value={
-                    `${claim?.staff.first_name} ${claim?.staff.last_name} ${claim?.staff.middle_name}` ||
+                    `${claim?.staff.first_name}   ${claim?.staff.last_name}    ${claim?.staff.other_names}` ||
                     'null'
                   }
                   className='mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md'
